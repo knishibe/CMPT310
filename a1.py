@@ -4,15 +4,17 @@ from search import *
 import time
 
 def make_rand_8puzzle():
-
+    #create a random eight puzzle
 	state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 	puzzle = EightPuzzle(state)
 
+    #do 100 moves
 	for i in range(100):
 
 		validAction = False
 
 		while(validAction == False):
+            #continue until random move is valid
 			y = random.randint(0, 3)
 			actions = puzzle.actions(state)
 
@@ -33,7 +35,7 @@ def make_rand_8puzzle():
 	return EightPuzzle(state)
 
 def display(state):
-	
+	#display an eight puzzle from a given state
 	for i in range(9):
 
 		if state[i] == 0:
@@ -45,7 +47,7 @@ def display(state):
 			print('\n', end = '')
 
 def display_duck(state):
-
+    #display a duck puzzle from a given state
 	for i in range(9):
 
 		if state[i] == 0:
@@ -59,6 +61,7 @@ def display_duck(state):
 			print('\n  ', end = '')
 
 def astar_search(problem, h=None, display=False):
+    #taken from search.py
     """A* search is best-first graph search with f(n) = g(n)+h(n).
     You need to specify the h function when you call astar_search, or
     else in your Problem subclass."""
@@ -66,6 +69,7 @@ def astar_search(problem, h=None, display=False):
     return best_first_graph_search(problem, lambda n: n.path_cost + h(n), display)
 
 def best_first_graph_search(problem, f, display=False):
+    #taken from search.py and added a counter
     """Search the nodes with the lowest f scores first.
     You specify the function f(node) that you want to minimize; for example,
     if f is a heuristic estimate to the goal, then we have greedy best
@@ -96,13 +100,14 @@ def best_first_graph_search(problem, f, display=False):
                     frontier.append(child)
     return None
 
-#Missing Tile Heuristic Function (from search.py)
 def h(node):
+    #Missing Tile Heuristic Function 
+    #taken from EightPuzzle in search.py
 	goal = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 	return sum(s != g for (s, g) in zip(node.state, goal))
 
-# Manhattan Heuristic Function
 def h2(node):
+    # Manhattan Heuristic Function
 
     sum = 0
 
@@ -118,11 +123,12 @@ def h2(node):
         sum += h
     return sum
 
-# Heuristic Function Max of Manhattan and Missing Tile
 def h3(node):
+    # Heuristic Function Max of Manhattan and Missing Tile
 	return max(h2(node), h(node))
 
 def solve_puzzle(puzzleNum, puzzle):
+    #helper function to solve puzzle and print results
 	global counter
 	counter = 0
 	t1 = time.time()
@@ -150,6 +156,7 @@ class DuckPuzzle(Problem):
         return state.index(0)
 
     def actions(self, state):
+        #taken from EightPuzzle in search.py and modified to work for DuckPuzzle
         """ Return the actions that can be executed in the given state.
         The result would be a list, since there are only four possible actions
         in any given state of the environment """
@@ -169,6 +176,7 @@ class DuckPuzzle(Problem):
         return possible_actions
 
     def result(self, state, action):
+        #taken from EightPuzzle in search.py and modified to work for DuckPuzzle
         """ Given state and action, return a new state that is the result of the action.
         Action is assumed to be a valid action in the state """
 
@@ -192,6 +200,7 @@ class DuckPuzzle(Problem):
 
     def h(self, node):
         # Misplaced Tile Heuristic
+        #taken from EightPuzzle in search.py
         return sum(s != g for (s, g) in zip(node.state, self.goal))
 
     def h2(self, node):
@@ -251,8 +260,10 @@ def make_rand_duckPuzzle():
     for i in range(100):
         
         validAction = False
+        #do 100 actions to mix puzzle up
         
         while(validAction == False):
+            #continue until random action is valid
             y = random.randint(0, 3)
             actions = puzzle.actions(state)
             
@@ -268,11 +279,14 @@ def make_rand_duckPuzzle():
             if(action in actions):
                 validAction = True
 
+        #do valid action on puzzle
         state = puzzle.result(state, action)
 
     return DuckPuzzle(state)
 
 def solve_puzzle_duck(puzzleNum, puzzle):
+    #helper function to solve puzzle and print results
+
 	global counter
 	counter = 0
 	t1 = time.time()
@@ -293,6 +307,7 @@ def solve_puzzle_duck(puzzleNum, puzzle):
 
 counter = 0
 
+# create 10 random eight puzzles
 puzzle1 = make_rand_8puzzle()
 puzzle2 = make_rand_8puzzle()
 puzzle3 = make_rand_8puzzle()
@@ -304,6 +319,7 @@ puzzle8 = make_rand_8puzzle()
 puzzle9 = make_rand_8puzzle()
 puzzle10 = make_rand_8puzzle()
 
+#create 10 random duck puzzles
 duck1 = make_rand_duckPuzzle()
 duck2 = make_rand_duckPuzzle()
 duck3 = make_rand_duckPuzzle()
@@ -359,7 +375,6 @@ duck28 = duck8
 duck29 = duck9
 duck30 = duck10
 
-# Misplaced Tile Heuristic
 
 print("Misplaced Tile Heuristic\n")
 
