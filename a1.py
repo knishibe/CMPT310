@@ -81,8 +81,8 @@ def best_first_graph_search(problem, f, display=False):
     global counter
     while frontier:
         node = frontier.pop()
-        counter = len(explored)
         if problem.goal_test(node.state):
+            counter = len(explored) + 1
             if display:
                 print(len(explored), "paths have been expanded and", len(frontier), "paths remain in the frontier")
             return node
@@ -134,8 +134,7 @@ def solve_puzzle(puzzleNum, puzzle):
 		node = astar_search(puzzle, h=h3, display = False)
 	t2 = time.time()
 
-	#explored + 1 = removed from frontier
-	print("Nodes Removed:", (counter + 1))
+	print("Nodes Removed:", (counter))
 	print("Length:", len(node.solution()))
 	print("Total time elapsed:", (t2-t1), "\n")
 
@@ -177,7 +176,12 @@ class DuckPuzzle(Problem):
         blank = self.find_blank_square(state)
         new_state = list(state)
 
-        delta = {'UP': -3, 'DOWN': 3, 'LEFT': -1, 'RIGHT': 1}
+        if blank <= 1:
+            delta = {'UP': -2, 'DOWN': 2, 'LEFT': -1, 'RIGHT': 1}
+        elif blank > 1 and blank <= 3:
+            delta = {'UP': -2, 'DOWN': 3, 'LEFT': -1, 'RIGHT': 1}
+        else:
+            delta = {'UP': -3, 'DOWN': 3, 'LEFT': -1, 'RIGHT': 1}
         neighbor = blank + delta[action]
         new_state[blank], new_state[neighbor] = new_state[neighbor], new_state[blank]
 
@@ -187,17 +191,57 @@ class DuckPuzzle(Problem):
         return state == self.goal
 
     def h(self, node):
-        # Missing Tile Heuristic
+        # Misplaced Tile Heuristic
         return sum(s != g for (s, g) in zip(node.state, self.goal))
 
     def h2(self, node):
         # Manhattan Heuristic
+        sum = 0
+        
+        for i in range(0,9):
+            
+            if node.state[i] < 3 and node.state[i] != 0:
+                v2 = 1
+            elif node.state[i] >= 3 and node.state[i] < 7:
+                v2 = 2
+            else:
+                v2 = 3
+            
+            if i < 2:
+                v1 = 1
+            elif i >= 2 and i < 6:
+                v1 = 2
+            else:
+                v1 = 3
 
-        return 
+            if node.state[i] == 1 or node.state[i] == 3:
+                h2 = 1
+            elif node.state[i] == 2 or node.state[i] == 4 or node.state[i] == 7:
+                h2 = 2
+            elif node.state[i] == 5 or node.state[i] == 8:
+                h2 = 3
+            else:
+                h2 = 4
+
+            if i == 0 or i == 2:
+                h1 = 1
+            elif i == 1 or i == 3 or i == 6:
+                h1 = 2
+            elif i == 4 or i == 7:
+                h1 = 3
+            else:
+                h1 = 4
+
+            v = abs(v2 - v1)
+            h = abs(h2 - h1)
+            sum += v
+            sum += h
+
+        return sum
 
     def h3(self, node):
-        # Max of Missing Tile Heuristic and Manhattan Heuristic
-        return max(h2(self, node), h(self, node))
+        # Max of Misplaced Tile Heuristic and Manhattan Heuristic
+        return max(self.h2(node), self.h(node))
 
 def make_rand_duckPuzzle():
 
@@ -226,13 +270,28 @@ def make_rand_duckPuzzle():
 
         state = puzzle.result(state, action)
 
-    return EightPuzzle(state)
+    return DuckPuzzle(state)
+
+def solve_puzzle_duck(puzzleNum, puzzle):
+	global counter
+	counter = 0
+	t1 = time.time()
+	if puzzleNum == 1:
+		node = astar_search(puzzle, h=puzzle.h, display = False)
+	elif puzzleNum == 2:
+		node = astar_search(puzzle, h=puzzle.h2, display = False)
+	elif puzzleNum == 3:
+		node = astar_search(puzzle, h=puzzle.h3, display = False)
+	t2 = time.time()
+
+	print("Nodes Removed:", (counter))
+	print("Length:", len(node.solution()))
+	print("Total time elapsed:", (t2-t1), "\n")
 
 
 # Main
 
 counter = 0
-
 
 puzzle1 = make_rand_8puzzle()
 puzzle2 = make_rand_8puzzle()
@@ -343,13 +402,39 @@ solve_puzzle(3, puzzle30)
 
 print("Misplaced Tile Heuristic Duck\n")
 
-solve_puzzle(1, duck1)
-solve_puzzle(1, duck2)
-solve_puzzle(1, duck3)
-solve_puzzle(1, duck4)
-solve_puzzle(1, duck5)
-solve_puzzle(1, duck6)
-solve_puzzle(1, duck7)
-solve_puzzle(1, duck8)
-solve_puzzle(1, duck9)
-solve_puzzle(1, duck10)
+solve_puzzle_duck(1, duck1)
+solve_puzzle_duck(1, duck2)
+solve_puzzle_duck(1, duck3)
+solve_puzzle_duck(1, duck4)
+solve_puzzle_duck(1, duck5)
+solve_puzzle_duck(1, duck6)
+solve_puzzle_duck(1, duck7)
+solve_puzzle_duck(1, duck8)
+solve_puzzle_duck(1, duck9)
+solve_puzzle_duck(1, duck10)
+
+print("Manhattan Heuristic Duck\n")
+
+solve_puzzle_duck(2, duck11)
+solve_puzzle_duck(2, duck12)
+solve_puzzle_duck(2, duck13)
+solve_puzzle_duck(2, duck14)
+solve_puzzle_duck(2, duck15)
+solve_puzzle_duck(2, duck16)
+solve_puzzle_duck(2, duck17)
+solve_puzzle_duck(2, duck18)
+solve_puzzle_duck(2, duck19)
+solve_puzzle_duck(2, duck20)
+
+print("Max of Misplaced Tile and Manhattan Heuristic Duck\n")
+
+solve_puzzle_duck(3, duck21)
+solve_puzzle_duck(3, duck22)
+solve_puzzle_duck(3, duck23)
+solve_puzzle_duck(3, duck24)
+solve_puzzle_duck(3, duck25)
+solve_puzzle_duck(3, duck26)
+solve_puzzle_duck(3, duck27)
+solve_puzzle_duck(3, duck28)
+solve_puzzle_duck(3, duck29)
+solve_puzzle_duck(3, duck30)
