@@ -103,18 +103,23 @@ def best_first_graph_search(problem, f, display=False):
 def h(node):
     #Missing Tile Heuristic Function 
     #taken from EightPuzzle in search.py
-	goal = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-	return sum(s != g for (s, g) in zip(node.state, goal))
+    goal = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    sum = 0
+    for i in range(0,9):
+        if node.state[i] != 0 and node.state[i] != goal[i]:
+            sum += 1
+    return sum
 
 def h2(node):
     # Manhattan Heuristic Function
 
     sum = 0
+    v = 0
+    h = 0
 
     for i in range(0,9):
         if node.state[i] == 0:
-            v = abs(2 - (i//3))
-            h = abs(2 - (i%3))
+            continue
         else:
             v = abs(((node.state[i] - 1) // 3) - (i//3))
             h = abs(((node.state[i] - 1) % 3) - (i%3))
@@ -133,7 +138,7 @@ def solve_puzzle(puzzleNum, puzzle):
 	counter = 0
 	t1 = time.time()
 	if puzzleNum == 1:
-		node = astar_search(puzzle, display = False)
+		node = astar_search(puzzle, h=h, display = False)
 	elif puzzleNum == 2:
 		node = astar_search(puzzle, h=h2, display = False)
 	elif puzzleNum == 3:
@@ -201,13 +206,25 @@ class DuckPuzzle(Problem):
     def h(self, node):
         # Misplaced Tile Heuristic
         #taken from EightPuzzle in search.py
-        return sum(s != g for (s, g) in zip(node.state, self.goal))
+        goal = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+        sum = 0
+        for i in range(0,9):
+            if node.state[i] != 0 and node.state[i] != goal[i]:
+                sum += 1
+        return sum
 
     def h2(self, node):
         # Manhattan Heuristic
         sum = 0
+        v1 = 0
+        v2 = 0
+        h1 = 0
+        h2 = 0
         
         for i in range(0,9):
+
+            if node.state[i] == 0:
+                continue
             
             if node.state[i] < 3 and node.state[i] != 0:
                 v2 = 1
