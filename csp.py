@@ -431,7 +431,7 @@ def backtracking_search(csp, select_unassigned_variable=first_unassigned_variabl
 # Min-conflicts Hill Climbing search for CSPs
 
 
-def min_conflicts(csp, max_steps=100000):
+def min_conflicts(csp, max_steps=10000):
     """Solve a CSP by stochastic Hill Climbing on the number of conflicts."""
     # Generate a complete assignment for all variables (probably with conflicts)
     csp.current = current = {}

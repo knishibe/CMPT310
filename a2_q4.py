@@ -1,4 +1,4 @@
-﻿from csp import *
+from csp import *
 from a2_q2 import *
 from a2_q1 import *
 import time
@@ -30,10 +30,9 @@ def MapColoringCSP_modified(colors, neighbors):
         neighbors = parse_neighbors(neighbors)
     return CSP_Derived(list(neighbors.keys()), UniversalDict(colors), neighbors, different_values_constraint)
 
+def run_q4():
 
-def run_q3():
-
-    f2 = open('q3.csv', 'w')
+    f2 = open('q4.csv', 'w')
 
     # repeat 5 times to obtain 30 different solutions
     for k in range(5):
@@ -46,16 +45,14 @@ def run_q3():
             graph, edges = rand_graph((i+1)/10, 31)
             graphs.append(graph)
             edge_counts.append(edges)
-           
-        for i in range(6):
-            teams = [0]
 
-            # start timer
-            startTime = time.time()
+        for i in range(3):
+            teams = [0]
 
             # start with 1 team and increase if unsolveable
             for j in range(31):
                 print(j)
+                startTime = time.time()
                 csp = MapColoringCSP_modified(teams, graphs[i])
 
                 # run arc consistancy algorithm to decrease the search 
@@ -67,16 +64,15 @@ def run_q3():
                     continue
 
                 # run backtracking algorithm and reject if no solution
-                sol = backtracking_search(csp, mrv, lcv, forward_checking) 
+                sol = min_conflicts(csp, 1000)
                 if sol is None:
                     teams.append(j+1)
                 else:
-                    # if the solution has been found, stop timer, 
-                    # double check with check_teams() function,
-                    # and print the number of teams in the solution
+                    # if the solution has been found, double check with 
+                    # check_teams() function and print the solution to console
                     endTime = time.time()
                     print(str(check_teams(graphs[i], sol)))
-                    print("# of Teams: %d;" %len(teams))
+                    print(sol)
 
                     # write data to .csv file for analysis
                     f2.write("%d;" %len(teams))
@@ -91,6 +87,4 @@ def run_q3():
 
     f2.close()
 
-run_q3()
-
-    
+run_q4()
