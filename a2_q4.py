@@ -35,7 +35,7 @@ def run_q4():
     f2 = open('q4.csv', 'w')
 
     # repeat 5 times to obtain 30 different solutions
-    for k in range(1):
+    for k in range(5):
 
         graphs = []
         edge_counts = []
