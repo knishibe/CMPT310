@@ -35,24 +35,27 @@ def run_q4():
     f2 = open('q4.csv', 'w')
 
     # repeat 5 times to obtain 30 different solutions
-    for k in range(5):
+    for k in range(1):
 
         graphs = []
         edge_counts = []
 
         # create 6 instances of random graphs with different probabilities (0.1 to 0.6)
         for i in range(6):
-            graph, edges = rand_graph((i+1)/10, 31)
+            graph, edges = rand_graph((i+1)/10, 105)
             graphs.append(graph)
             edge_counts.append(edges)
 
-        for i in range(3):
+        for i in range(6):
             teams = [0]
+
+            # start timer
+            startTime = time.time()
 
             # start with 1 team and increase if unsolveable
             for j in range(31):
-                print(j)
-                startTime = time.time()
+
+                # initialize csp problem
                 csp = MapColoringCSP_modified(teams, graphs[i])
 
                 # run arc consistancy algorithm to decrease the search 
@@ -68,11 +71,16 @@ def run_q4():
                 if sol is None:
                     teams.append(j+1)
                 else:
-                    # if the solution has been found, double check with 
-                    # check_teams() function and print the solution to console
+                    # if the solution has been found, stop timer, 
+                    # double check with check_teams() function,
+                    # and print information to console
                     endTime = time.time()
-                    print(str(check_teams(graphs[i], sol)))
-                    print(sol)
+                    print("Correct Solution: " + str(check_teams(graphs[i], sol)))
+                    print("Number of Teams: %d" %len(teams))
+                    print("Number of Assigns: %d" %csp.nassigns)
+                    print("Number of Unassigns: %d" %csp.n_unassigns)
+                    print("Number of Edges in Graph: %d" %edge_counts[i])
+                    print("Time elapsed: " + str(endTime - startTime) + "\n")
 
                     # write data to .csv file for analysis
                     f2.write("%d;" %len(teams))

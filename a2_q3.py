@@ -55,7 +55,8 @@ def run_q3():
 
             # start with 1 team and increase if unsolveable
             for j in range(31):
-                print(j)
+                
+                # initialize csp problem
                 csp = MapColoringCSP_modified(teams, graphs[i])
 
                 # run arc consistancy algorithm to decrease the search 
@@ -73,10 +74,14 @@ def run_q3():
                 else:
                     # if the solution has been found, stop timer, 
                     # double check with check_teams() function,
-                    # and print the number of teams in the solution
+                    # and print information to console
                     endTime = time.time()
-                    print(str(check_teams(graphs[i], sol)))
-                    print("# of Teams: %d;" %len(teams))
+                    print("Correct Solution: " + str(check_teams(graphs[i], sol)))
+                    print("Number of Teams: %d" %len(teams))
+                    print("Number of Assigns: %d" %csp.nassigns)
+                    print("Number of Unassigns: %d" %csp.n_unassigns)
+                    print("Number of Edges in Graph: %d" %edge_counts[i])
+                    print("Time elapsed: " + str(endTime - startTime) + "\n")
 
                     # write data to .csv file for analysis
                     f2.write("%d;" %len(teams))
