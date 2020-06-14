@@ -68,7 +68,7 @@ def run_q3():
                     continue
 
                 # run backtracking algorithm and reject if no solution
-                sol = backtracking_search(csp, mrv, lcv, forward_checking) 
+                sol = backtracking_search(csp, mrv, unordered_domain_values, forward_checking) 
                 if sol is None:
                     teams.append(j+1)
                 else:
