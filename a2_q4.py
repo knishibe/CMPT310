@@ -55,6 +55,10 @@ def run_q4():
             # start with 1 team and increase if unsolveable
             for j in range(31):
 
+                # initialize total assigned and unassigned to 0
+                totalA = 0
+                totalUA = 0
+
                 # initialize csp problem
                 csp = MapColoringCSP_modified(teams, graphs[i])
 
@@ -68,6 +72,10 @@ def run_q4():
 
                 # run backtracking algorithm and reject if no solution
                 sol = min_conflicts(csp, 1000)
+
+                totalA += csp.nassigns
+                totalUA += csp.n_unassigns
+
                 if sol is None:
                     teams.append(j+1)
                 else:
@@ -79,6 +87,8 @@ def run_q4():
                     print("Number of Teams: %d" %len(teams))
                     print("Number of Assigns: %d" %csp.nassigns)
                     print("Number of Unassigns: %d" %csp.n_unassigns)
+                    print("Total Assigns: %d" %totalA)
+                    print("Total Unassigns: %d" %totalUA)
                     print("Number of Edges in Graph: %d" %edge_counts[i])
                     print("Time elapsed: " + str(endTime - startTime) + "\n")
 
@@ -86,6 +96,8 @@ def run_q4():
                     f2.write("%d;" %len(teams))
                     f2.write("%d;" %csp.nassigns)
                     f2.write("%d;" %csp.n_unassigns)
+                    f2.write("%d;" %totalA)
+                    f2.write("%d;" %totalUA)
                     f2.write("%d;" %edge_counts[i])
                     f2.write(str(endTime - startTime))
                     f2.write("\n")
