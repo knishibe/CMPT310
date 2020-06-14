@@ -53,12 +53,13 @@ def run_q3():
             # start timer
             startTime = time.time()
 
+            # initialize total assigned and unassigned to 0
+            totalA = 0
+            totalUA = 0
+
             # start with 1 team and increase if unsolveable
             for j in range(31):
                 
-                # initialize total assigned and unassigned to 0
-                totalA = 0
-                totalUA = 0
 
                 # initialize csp problem
                 csp = MapColoringCSP_modified(teams, graphs[i])
