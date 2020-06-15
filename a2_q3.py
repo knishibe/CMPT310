@@ -48,7 +48,8 @@ def run_q3():
             edge_counts.append(edges)
            
         for i in range(6):
-            teams = [0]
+            # start with the maximum number of teams possible
+            teams = [i for i in range(31)]
 
             # start timer
             startTime = time.time()
@@ -69,33 +70,42 @@ def run_q3():
                 # at least one person has a friend)
                 is_sol = AC3(csp)
                 if  is_sol[0] == False:
-                    teams.append(j+1)
+                    teams.remove(30-j)
                     continue
 
-                # run backtracking algorithm and reject if no solution
+                # run backtracking algorithm with fewer teams until there is no solution
+                # the smallest number of teams is the number of teams in the solution
+                # in which one less team produces no solution
                 sol = backtracking_search(csp, mrv, unordered_domain_values, forward_checking) 
                 totalA += csp.nassigns
                 totalUA += csp.n_unassigns
-                if sol is None:
-                    teams.append(j+1)
+                if sol is not None:
+                    teams.remove(30-j)
+
+                    # remember previous values so that the solution
+                    # is the number of teams one bigger than when there is no solution
+                    assigns = csp.nassigns
+                    unassigns = csp.n_unassigns
+                    prevSol = sol
+
                 else:
                     # if the solution has been found, stop timer, 
                     # double check with check_teams() function,
                     # and print information to console
                     endTime = time.time()
-                    print("Correct Solution: " + str(check_teams(graphs[i], sol)))
-                    print("Number of Teams: %d" %len(teams))
-                    print("Number of Assigns: %d" %csp.nassigns)
-                    print("Number of Unassigns: %d" %csp.n_unassigns)
+                    print("Correct Solution: " + str(check_teams(graphs[i], prevSol)))
+                    print("Number of Teams: %d" %(len(teams)+1))
+                    print("Number of Assigns: %d" %assigns)
+                    print("Number of Unassigns: %d" %unassigns)
                     print("Total Assigns: %d" %totalA)
                     print("Total Unassigns: %d" %totalUA)
                     print("Number of Edges in Graph: %d" %edge_counts[i])
                     print("Time elapsed: " + str(endTime - startTime) + "\n")
 
                     # write data to .csv file for analysis
-                    f2.write("%d;" %len(teams))
-                    f2.write("%d;" %csp.nassigns)
-                    f2.write("%d;" %csp.n_unassigns)
+                    f2.write("%d;" %(len(teams)+1))
+                    f2.write("%d;" %assigns)
+                    f2.write("%d;" %unassigns)
                     f2.write("%d;" %totalA)
                     f2.write("%d;" %totalUA)
                     f2.write("%d;" %edge_counts[i])
