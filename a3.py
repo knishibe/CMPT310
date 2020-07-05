@@ -42,6 +42,8 @@ def play_a_new_game():
 
         # select valid move
         if player == human:
+            print("Valid moves: \n")
+            print_moves(board)
             move = humanTurn(valid_moves)
         else:
             move = computerTurn(board, valid_moves, computer)
@@ -57,16 +59,18 @@ def play_a_new_game():
 
     print_board(board)
 
-    if win:
-        print("\nPlayer %d won!" %player)
+    # display results to console
+    if win and player == human:
+        print("\nCONGRATULATIONS! YOU WON!")
+    elif win and player == computer:
+        print("\nSORRY, THE COMPUTER WON :(")
     elif draw:
-        print("\nDraw!")
+        print("\nIT'S A DRAW!")
 
 
 # this function is to allow the player to take their turn
 def humanTurn(valid_moves):
     while True:
-        print("Valid moves: ", valid_moves)
         val = input("Please enter the box that you would like to go: ")
         print("\n", end="")
         move = int(val)
@@ -92,7 +96,7 @@ def computerTurn(board, valid_moves, computer):
         losses = 0
         draws = 0
 
-        # complete 500 random playouts for each valid move
+        # complete 150 random playouts for each valid move
         for j in range(150):
             win = False
             draw = False
@@ -112,7 +116,7 @@ def computerTurn(board, valid_moves, computer):
                 win = check_win(test_board, player)
                 draw = check_draw(test_board)
 
-            # heuristic: increment for win, decrement for loss and do nothing for draw
+            # calculate number of wins, draws, and losses
             if win and player == computer:
                 wins += 1
             elif win and player != computer:
@@ -121,9 +125,11 @@ def computerTurn(board, valid_moves, computer):
                 draws += 1
         
         if computer == 1:
+            # heuristic funcition for computer going first
             h_val[str(move)] = -losses
         elif computer == 2:
-            h_val[str(move)] = wins - losses
+            # heuristic function for computer going second
+            h_val[str(move)] = wins + 0.5*draws -losses
 
     # select the move with the highest heuristic value
     comp_move = max(h_val, key=h_val.get)
@@ -167,7 +173,28 @@ def print_board(board):
     for i in range(3):
         for j in range(3):
             if board[i*3+j] == 0:
-                print(" * ", end = "")
+                print("   ", end = "")
+            elif board[i*3+j] == 1:
+                print(" X ", end = "")
+            elif board[i*3+j] == 2:
+                print(" O ", end = "")
+
+            # print lines in board
+            if j != 2:
+                print("|", end = "")
+        if i != 2:
+            print("\n---+---+---")
+    print("\n")
+
+# this function is used to print the current
+# tic tac toe board to console with the possible moves
+def print_moves(board):
+
+    # player 1 is X player 2 is O
+    for i in range(3):
+        for j in range(3):
+            if board[i*3+j] == 0:
+                print(" %d " %(i*3+j), end = "")
             elif board[i*3+j] == 1:
                 print(" X ", end = "")
             elif board[i*3+j] == 2:
