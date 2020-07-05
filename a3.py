@@ -33,12 +33,12 @@ def play_a_new_game():
 
     # continue game until someone has won or there is a draw
     while not win and not draw:
+        print("Current Board: \n")
         print_board(board)
 
         # alternate players
         player = (count % 2) + 1
         count += 1
-        print("Player %d's turn\n" %player)
 
         # select valid move
         if player == human:
@@ -46,6 +46,7 @@ def play_a_new_game():
             print_moves(board)
             move = humanTurn(valid_moves)
         else:
+            print("Opponent is playing...\n")
             move = computerTurn(board, valid_moves, computer)
 
         # update the board with the chosen move with the 
@@ -71,7 +72,7 @@ def play_a_new_game():
 # this function is to allow the player to take their turn
 def humanTurn(valid_moves):
     while True:
-        val = input("Please enter the box that you would like to go: ")
+        val = input("Your turn!\nPlease enter the box that you would like to go: ")
         print("\n", end="")
         move = int(val)
         if move in valid_moves:
