@@ -3,7 +3,6 @@
 # ...
 
 import random 
-import time
 
 # this function starts a new game of tic tac toe with the computer
 def play_a_new_game():
