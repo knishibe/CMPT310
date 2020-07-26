@@ -1,0 +1,25 @@
+turn_right <-- right_lane & right_turn_signal
+stop_sign <-- turn_right & red_light
+turn_left <-- left_lane & left_turn_signal
+go_straight <-- no_turn_signal
+pull_over <-- sirens
+stop <-- turn_left & red_light
+stop <-- go_straight & red_light
+go <-- go_straight & green_light
+traffic_clear <-- gap_in_cars & crosswalk & no_padestrian 
+traffic_clear <-- no_cars & crosswalk & no_padestrian 
+traffic_clear <-- gap_in_cars & no_crosswalk
+traffic_clear <-- no_cars & no_crosswalk
+go <-- turn_left & left_turn_light
+go <-- turn_left & green_light & traffic_clear
+go <-- stop_sign & stopped & traffic_clear
+go <-- stop_sign & stopped & traffic_clear
+go <-- turn_right & green_light
+brake <-- stop
+brake <-- go & above_speed_limit
+gas <-- go & below_speed_limit
+gas <-- go & stopped
+switch_to_right_lane <-- left_lane & right_turn_signal
+switch_to_left_lane <-- right_lane & left_turn_signal
+slow_down <-- speed_bump
+brake <-- slow_down

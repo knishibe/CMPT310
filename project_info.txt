@@ -1,0 +1,14 @@
+Team Members: Kira Nishi-Beckingham (TA: Chhavi) and Emily Chen (TA: Mohammad)
+Project: Reversi with Monte-Carlo Tree Search
+Main Programming Language: C++
+Libraries: 
+	At this point, the libraries we will be using are not clear to us except for 
+	the potential standard libraries such as:
+		- iostream
+		- cmath
+		- string
+		- array
+		- cstdlib
+
+	As we progress with the project, we will be able to define a more definite list 
+	of libraries used. Thank you!
